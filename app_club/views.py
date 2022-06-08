@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from app_club.forms import *
 from app_club.models import *
+from django.db.models import Q
 
 # Create your views here.
 def index(request):
@@ -192,3 +193,38 @@ def entrenamiento_form(request):
         context=context_dict, 
         template_name="app_club/entrenamiento_form.html"
         )
+
+
+def busqueda(request):
+    if request.GET['texto_busqueda']:
+        busqueda_param = request.GET['texto_busqueda']
+        categoria = Categoria.objects.filter(nombre__contains=busqueda_param)
+        context_dict = {
+            'categoria' : categoria,
+        }
+    elif request.GET['año_busqueda']:
+        busqueda_param = request.GET['año_busqueda']
+        categoria = Categoria.objects.filter(año__contains=busqueda_param)
+        context_dict = {
+            'categoria' : categoria,
+        }
+    elif request.GET['disciplina_busqueda']:
+        busqueda_param = request.GET['disciplina_busqueda']
+        categoria = Categoria.objects.filter(disciplina__contains=busqueda_param)
+        context_dict = {
+            'categoria' : categoria,
+        }
+    elif request.GET['all_busqueda']:
+        busqueda_param = request.GET['all_busqueda']
+        query = Q(nombre__contains=busqueda_param)
+        query.add(Q(año__contains=busqueda_param), Q.OR)
+        categoria = Categoria.objects.filter(query)
+        context_dict = {
+            'categoria' : categoria,
+        }
+    
+    return render(
+        request=request,
+        context=context_dict,
+        template_name="app_club/home.html"
+    )

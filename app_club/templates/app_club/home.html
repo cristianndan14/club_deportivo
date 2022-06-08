@@ -4,6 +4,45 @@
 
 {% block app_club_content %}
 
+<h2>Buscador de Categorias</h2>
+<hr></hr>
+
+<form action="/app_club/" method="GET">
+    <div>
+        <input type="text" name="texto_busqueda" id="categoria_nombre" placeholder="Busqueda por nombre">
+        <input type="submit" value="Buscar por Nombre">
+    </div>
+    <div>
+        <input type="number" name="año_busqueda" id="categoria_año" placeholder="Busqueda por año">
+        <input type="submit" value="Buscar por Año">
+    </div>
+    <div>
+        <input type="text" name="disciplina_busqueda" id="categoria_disciplina" placeholder="Busqueda por disciplina">
+        <input type="submit" value="Buscar por disciplina">
+    </div>
+    <div>
+        <input type="text" name="all_busqueda" id="categoria_nombre_año_o_disciplina" placeholder="Busqueda general">
+        <input type="submit" value="Buscar">
+    </div>
+
+</form>
+
+<hr></hr>
+
+
+{% if categoria %}
+    <ul>
+        {% for categorias in categoria %}
+            <li>
+                Categoria: {{categorias.nombre}}
+                -- Año: {{categorias.año}}
+                -- Disciplina: {{categorias.disciplina}}
+            </li>
+        {% endfor %}
+    </ul>
+
+    
+{% endif %}
 
 
 

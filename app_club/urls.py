@@ -12,4 +12,5 @@ urlpatterns = [
     path('deportista_form', deportista_form, name='Deportista_form'),
     path('entrenador_form', entrenador_form, name='Entrenador_form'),
     path('entrenamiento_form', entrenamiento_form, name='Entrenamiento_form'),
+    path('busqueda', busqueda, name='Busqueda'),
 ]
