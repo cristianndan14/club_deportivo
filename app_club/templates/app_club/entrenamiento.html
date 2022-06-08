@@ -1,12 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
-</html>
+{% extends "app_club/index.html" %}
+
+{% load static %}
+
+{% block app_club_content %}
+
+
+<h2>Lista de Entrenamientos</h2>
+<a class="card_custom" href="{% url 'Entrenamiento_form' %}">Crear un nuevo Entrenamiento</a>
+<hr></hr>
+<ul>
+    {% for entrenamientos in entrenamiento %}
+        <li>
+            Fecha: {{entrenamientos.fecha}}
+            -- Disciplina: {{entrenamientos.disciplina}}
+        </li>
+    {% endfor %}
+</ul>
+
+
+
+{% endblock %}

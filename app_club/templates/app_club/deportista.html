@@ -1,12 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
-</html>
+{% extends "app_club/index.html" %}
+
+{% load static %}
+
+{% block app_club_content %}
+
+<h2>Lista de Deportistas</h2>
+<a class="card_custom" href="{% url 'Deportista_form' %}">Crear un nuevo Deportista</a>
+<hr></hr>
+<ul>
+    {% for deportistas in deportista %}
+        <li>
+            Nombre: {{deportistas.nombre}}
+            -- Apellido: {{deportistas.apellido}}
+            -- Disciplina: {{deportistas.disciplina}}
+            -- Disponibilidad:
+            {% if deportista.disponibilidad %}
+                Si
+            {% else %}
+                No
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
+
+
+
+
+
+{% endblock %}
