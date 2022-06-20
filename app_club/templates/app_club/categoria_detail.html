@@ -1,0 +1,11 @@
+{% extends "app_club/index.html" %}
+{% load static %}
+{% block app_club_content %}
+
+<h2>Detalle de la Categoria</h2>
+<hr></hr>
+<p><h3>Categoria: {{ categoria.nombre }}</h3></p>
+<p><h4>Año: {{ categoria.año }}</h4></p>
+<p><h4>Disciplina: {{ categoria.disciplina }}</h4></p>
+<p><a class="btn2 btn-primary" href="{% url 'app_club:categoria-list' %}">Regresar a la lista de categorias</a></p>
+{% endblock %}

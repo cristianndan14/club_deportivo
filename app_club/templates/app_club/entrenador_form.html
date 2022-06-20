@@ -1,24 +1,20 @@
 {% extends "app_club/index.html" %}
-
 {% load static %}
-
 {% block app_club_content %}
 
 
-<h2>Formulario para la inserción de un nuevo Entrenador</h2>
+<h2>Formulario para la edicion del entrenador {{entrenador.nombre}} </h2>
 <hr></hr>
 
 <form action="" method="POST">
     {% csrf_token %}
 
     <table>
-        {{entrenador_form.as_table}}
+        {{ entrenador_form.as_p }}
     </table>
 
-    <input type="submit" class="btn btn-primary" value="Crear Entrenador"/>
+    <input type="submit" class="btn btn-primary" value="Guardar Entrenador"/>
 
 </form>
-
-
 
 {% endblock %}

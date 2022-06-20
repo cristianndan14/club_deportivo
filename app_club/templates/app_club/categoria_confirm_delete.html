@@ -1,0 +1,16 @@
+{% extends "app_club/index.html" %}
+{% load static %}
+{% block app_club_content %}
+
+<h2>Eliminar Categoria</h2>
+<hr></hr>
+
+<p>Estás seguro de eliminar la Categoria: {{ categoria.nombre }} {{ categoria.año }} de {{ categoria.disciplina }}?</p>
+
+<form action="" method="POST">
+    {% csrf_token %}
+    <input class="btn2 btn-warning" type="submit" value="Si, eliminar.">
+    <a class="btn2 btn-primary" href="{% url 'app_club:categoria-list' %}" >Cancelar</a>
+</form>
+
+{% endblock %}

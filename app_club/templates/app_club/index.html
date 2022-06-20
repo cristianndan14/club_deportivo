@@ -24,11 +24,11 @@
         <!-- Navigation-->
         <nav class="navbar navbar-light bg-light static-top">
             <div class="container">
-                <a class="navbar-brand" href="{% url 'Home' %}">Home</a>
-                <a class="navbar-brand" href="{% url 'Entrenador' %}">Entrenadores</a>
-                <a class="navbar-brand" href="{% url 'Categoria' %}">Categorias</a>
-                <a class="navbar-brand" href="{% url 'Deportista' %}">Deportistas</a>
-                <a class="navbar-brand" href="{% url 'Entrenamiento' %}">Entrenamientos</a>
+                <a class="navbar-brand" href="{% url 'app_club:Home' %}">Home</a>
+                <a class="navbar-brand" href="{% url 'app_club:Entrenador' %}">Entrenadores</a>
+                <a class="navbar-brand" href="{% url 'app_club:categoria-list' %}">Categorias</a>
+                <a class="navbar-brand" href="{% url 'app_club:Deportista' %}">Deportistas</a>
+                <a class="navbar-brand" href="{% url 'app_club:Entrenamiento' %}">Entrenamientos</a>
                 <a class="navbar-brand">{{user.username}}</a>
                 <a class="btn btn-primary" href="#login">Iniciar sesión</a>
             </div>

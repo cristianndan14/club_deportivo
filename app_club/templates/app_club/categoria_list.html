@@ -1,0 +1,29 @@
+{% extends "app_club/index.html" %}
+{% load static %}
+{% block app_club_content %}
+
+<h2>Lista de Categorias</h2>
+<a class="card_custom" href="{% url 'app_club:categoria-add' %}">Crear nueva Categoria</a>
+<hr></hr>
+<ul>
+    {% for categoria in categoria_list %}
+    <li>
+        {{categoria}}
+        (
+        <a href="{% url 'app_club:categoria-detail' categoria.id %}">
+            <i class="fa fa-eye" style="color: rgb(0, 0, 255);"> </i>
+        </a>
+        |
+        <a href="{% url 'app_club:categoria-update' categoria.id %}">
+            <i class="fa fa-pencil" style="color: rgb(0, 0, 190);"> </i>
+        </a>
+        |
+        <a href="{% url 'app_club:categoria-delete' categoria.id %}">
+            <i class="fa fa-trash" style="color: rgb(0, 0, 100);"> </i>
+        </a>
+        )
+    </li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

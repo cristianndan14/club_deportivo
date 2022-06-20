@@ -1,3 +1,5 @@
+from multiprocessing import context
+from django.forms import model_to_dict
 from django.shortcuts import render
 from app_club.forms import *
 from app_club.models import *
@@ -15,9 +17,11 @@ def categoria(request):
         'categoria' : categoria,
     }
 
-    return render(request=request, 
-    context=context_dict,
-    template_name='app_club/categoria.html')
+    return render(
+        request=request, 
+        context=context_dict,
+        template_name='app_club/categoria.html'
+    )
 
 
 def deportista(request):
@@ -27,9 +31,11 @@ def deportista(request):
         'deportista' : deportista,
     }
 
-    return render(request=request, 
-    context=context_dict,
-    template_name='app_club/deportista.html')
+    return render(
+        request=request, 
+        context=context_dict,
+        template_name='app_club/deportista.html'
+    )
 
 
 def entrenador(request):
@@ -39,9 +45,11 @@ def entrenador(request):
         'entrenador' : entrenador,
         }
 
-    return render(request=request,
-     context=context_dict,
-     template_name='app_club/entrenador.html')
+    return render(
+        request=request,
+        context=context_dict,
+        template_name='app_club/entrenador.html'
+    )
 
 
 def entrenamiento(request):
@@ -51,9 +59,11 @@ def entrenamiento(request):
         'entrenamiento' : entrenamiento,
     }
 
-    return render(request=request, 
-    context=context_dict,
-    template_name='app_club/entrenamiento.html')
+    return render(
+        request=request, 
+        context=context_dict,
+        template_name='app_club/entrenamiento.html'
+    )
 
 
 def categoria_form(request):
@@ -76,7 +86,7 @@ def categoria_form(request):
                 request=request, 
                 context=context_dict, 
                 template_name="app_club/categoria.html"
-                )
+            )
     
     categoria_form = CategoriaForm(request.POST)
     context_dict = {
@@ -87,7 +97,7 @@ def categoria_form(request):
         request=request, 
         context=context_dict, 
         template_name="app_club/categoria_form.html"
-        )
+    )
 
 
 def deportista_form(request):
@@ -112,7 +122,7 @@ def deportista_form(request):
                 request=request, 
                 context=context_dict, 
                 template_name="app_club/deportista.html"
-                )
+            )
     
     deportista_form = DeportistaForm(request.POST)
     context_dict = {
@@ -123,7 +133,7 @@ def deportista_form(request):
         request=request, 
         context=context_dict, 
         template_name="app_club/deportista_form.html"
-        )
+    )
 
 
 def entrenador_form(request):
@@ -147,7 +157,7 @@ def entrenador_form(request):
                 request=request, 
                 context=context_dict, 
                 template_name="app_club/entrenador.html"
-                )
+            )
     
     entrenador_form = EntrenadorForm(request.POST)
     context_dict = {
@@ -158,7 +168,7 @@ def entrenador_form(request):
         request=request, 
         context=context_dict, 
         template_name="app_club/entrenador_form.html"
-        )
+    )
 
 
 def entrenamiento_form(request):
@@ -181,7 +191,7 @@ def entrenamiento_form(request):
                 request=request, 
                 context=context_dict, 
                 template_name="app_club/entrenamiento.html"
-                )
+            )
     
     entrenamiento_form = EntrenamientoForm(request.POST)
     context_dict = {
@@ -192,10 +202,11 @@ def entrenamiento_form(request):
         request=request, 
         context=context_dict, 
         template_name="app_club/entrenamiento_form.html"
-        )
+    )
 
 
 def busqueda(request):
+    context_dict = dict()
     if request.GET['texto_busqueda']:
         busqueda_param = request.GET['texto_busqueda']
         categoria = Categoria.objects.filter(nombre__contains=busqueda_param)
@@ -222,9 +233,102 @@ def busqueda(request):
         context_dict = {
             'categoria' : categoria,
         }
-    
+
     return render(
         request=request,
         context=context_dict,
         template_name="app_club/home.html"
     )
+
+
+def delete_entrenador(request, pk: int):
+    entrenador = Entrenador.objects.get(pk=pk)
+    
+    if request.method == 'POST':
+        entrenador.delete()
+
+        entrenador = Entrenador.objects.all()
+        context_dict = {
+            'entrenador': entrenador,
+        }
+        return render(
+            request=request,
+            context=context_dict,
+            template_name="app_club/entrenador.html"
+        )
+
+    context_dict = {
+        'entrenador': entrenador,
+    }
+    return render(
+        request=request,
+        context=context_dict,
+        template_name='app_club/entrenador_confirm_delete.html'
+    )
+
+
+def update_entrenador(request, pk: int):
+    entrenador = Entrenador.objects.get(pk=pk)
+
+    if request.method == 'POST':
+        entrenador_form = EntrenadorForm(request.POST)
+        if entrenador_form.is_valid():
+            data = entrenador_form.cleaned_data
+            entrenador.nombre = data['nombre']
+            entrenador.apellido = data['apellido']
+            entrenador.disciplina = data['disciplina']
+            entrenador.save()
+
+            entrenador = Entrenador.objects.all()
+            context_dict = {
+                'entrenador': entrenador
+            }
+            return render(
+                request=request,
+                context=context_dict,
+                template_name="app_club/entrenador.html"
+            )
+
+    entrenador_form = EntrenadorForm(model_to_dict(entrenador))
+    context_dict = {
+        'entrenador': entrenador,
+        'entrenador_form': entrenador_form,
+    }
+    return render(
+        request=request,
+        context=context_dict,
+        template_name='app_club/entrenador_form.html'
+    )
+
+
+from django.urls import reverse_lazy
+from django.views.generic import ListView
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+
+
+class CategoriaListView(ListView):
+    model = Categoria
+    template_name = "app_club/categoria_list.html"
+
+
+class CategoriaDetailView(DetailView):
+    model = Categoria
+    template_name = "app_club/categoria_detail.html"
+
+
+class CategoriaCreateView(CreateView):
+    model = Categoria
+    success_url = reverse_lazy('app_club:categoria-list')
+    fields = ['nombre', 'año', 'disciplina']
+
+
+class CategoriaUpdateView(UpdateView):
+    model = Categoria
+    success_url = reverse_lazy('app_club:categoria-list')
+    fields = ['nombre', 'año', 'disciplina']
+
+
+class CategoriaDeleteView(DeleteView):
+    model = Categoria
+    success_url = reverse_lazy('app_club:categoria-list')

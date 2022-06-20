@@ -1,24 +1,20 @@
 {% extends "app_club/index.html" %}
-
 {% load static %}
-
 {% block app_club_content %}
 
-
-<h2>Formulario para la inserción de una nueva categoria</h2>
+<h2>Formulario para guardar/editar categoria</h2>
 <hr></hr>
 
 <form action="" method="POST">
     {% csrf_token %}
-
+    <p>
     <table>
-        {{categoria_form.as_table}}
+        {{ form.as_table }}
     </table>
-
-    <input type="submit" class="btn btn-primary" value="Crear categoria"/>
-
+    </p>
+    <p>
+        <input type="submit" class="btn btn-primary" value="Guardar categoria" />
+    </p>
 </form>
-
-
 
 {% endblock %}

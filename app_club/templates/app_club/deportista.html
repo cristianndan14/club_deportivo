@@ -5,7 +5,7 @@
 {% block app_club_content %}
 
 <h2>Lista de Deportistas</h2>
-<a class="card_custom" href="{% url 'Deportista_form' %}">Crear un nuevo Deportista</a>
+<a class="card_custom" href="{% url 'app_club:Deportista_form' %}">Crear un nuevo Deportista</a>
 <hr></hr>
 <ul>
     {% for deportistas in deportista %}
