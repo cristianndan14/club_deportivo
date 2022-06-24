@@ -29,8 +29,12 @@
                 <a class="navbar-brand" href="{% url 'app_club:categoria-list' %}">Categorias</a>
                 <a class="navbar-brand" href="{% url 'app_club:Deportista' %}">Deportistas</a>
                 <a class="navbar-brand" href="{% url 'app_club:Entrenamiento' %}">Entrenamientos</a>
-                <a class="navbar-brand">{{user.username}}</a>
-                <a class="btn btn-primary" href="#login">Iniciar sesión</a>
+                {% if user.is_authenticated %}
+                <a class="navbar-brand">Bienvenido {{user.username}}</a>
+                <a class="btn btn-primary" href="{% url 'app_club:user-logout' %}">Cerrar sesión</a>
+                {% else %}
+                <a class="btn btn-primary" href="{% url 'app_club:user-login' %}">Iniciar sesión</a>
+                {% endif %}
             </div>
         </nav>
         <!-- Masthead-->

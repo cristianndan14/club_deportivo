@@ -17,10 +17,14 @@ urlpatterns = [
     path('entrenador/<int:pk>/delete', delete_entrenador, name='DeleteEntrenador'),
     path('entrenador/<int:pk>/update', update_entrenador, name='UpdateEntrenador'),
     path('busqueda', busqueda, name='Busqueda'),
-    # A partir de acá empiezo a usar las view de django para simplificar código
+    # A partir de acá empiezo a usar las view de django para simplificar código ('ListView')
     path('categorias', CategoriaListView.as_view(), name='categoria-list'),
     path('categoria/add/', CategoriaCreateView.as_view(), name='categoria-add'),
     path('categoria/<int:pk>/detail', CategoriaDetailView.as_view(), name='categoria-detail'),
     path('categoria/<int:pk>/update', CategoriaUpdateView.as_view(), name='categoria-update'),
     path('categoria/<int:pk>/delete', CategoriaDeleteView.as_view(), name='categoria-delete'),
+    # ------------ Login / Logout / Register ------------- #
+    path('login', login_request, name='user-login'),
+    path('logout', logout_request, name='user-logout'),
+    path('register', register, name='user-register'),
 ]

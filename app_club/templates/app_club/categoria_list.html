@@ -3,7 +3,9 @@
 {% block app_club_content %}
 
 <h2>Lista de Categorias</h2>
+{% if user.is_authenticated %}
 <a class="card_custom" href="{% url 'app_club:categoria-add' %}">Crear nueva Categoria</a>
+{% endif %}
 <hr></hr>
 <ul>
     {% for categoria in categoria_list %}
@@ -13,7 +15,7 @@
         <a href="{% url 'app_club:categoria-detail' categoria.id %}">
             <i class="fa fa-eye" style="color: rgb(0, 0, 255);"> </i>
         </a>
-        |
+        {% if user.is_authenticated %}
         <a href="{% url 'app_club:categoria-update' categoria.id %}">
             <i class="fa fa-pencil" style="color: rgb(0, 0, 190);"> </i>
         </a>
@@ -21,6 +23,7 @@
         <a href="{% url 'app_club:categoria-delete' categoria.id %}">
             <i class="fa fa-trash" style="color: rgb(0, 0, 100);"> </i>
         </a>
+        {% endif %}
         )
     </li>
     {% endfor %}
