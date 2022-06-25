@@ -9,3 +9,5 @@ admin.site.register(Deportista)
 admin.site.register(Entrenador)
 
 admin.site.register(Entrenamiento)
+
+admin.site.register(Avatar)

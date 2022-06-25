@@ -31,6 +31,7 @@
                 <a class="navbar-brand" href="{% url 'app_club:Entrenamiento' %}">Entrenamientos</a>
                 {% if user.is_authenticated %}
                 <a class="navbar-brand">Bienvenido {{user.username}}</a>
+                <a class="btn btn-secondary" href="{% url 'app_club:user-update' %}">Editar usuario</a>
                 <a class="btn btn-primary" href="{% url 'app_club:user-logout' %}">Cerrar sesión</a>
                 {% else %}
                 <a class="btn btn-primary" href="{% url 'app_club:user-login' %}">Iniciar sesión</a>
@@ -45,9 +46,14 @@
                         <div class="text-center text-white">
                             <!-- Page heading-->
                             <h1 class="mb-5">Gestion de <br>club deportivo</h1>
+                            {% if messages %}
+                                {% for message in messages %}
+                                <h4><p style="color: rgb(131, 31, 0)" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p></h4>
+                                {% endfor %}
+                            {% endif %}
                             <div class="text-lg-start text-white">
+                                
                                 {% block app_club_content %}
-
                                 {% endblock %}
                             </div>
                         </div>

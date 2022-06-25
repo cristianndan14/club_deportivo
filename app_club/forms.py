@@ -33,7 +33,7 @@ class EntrenamientoForm(forms.Form):
 
 
 class UserRegisterForm(UserCreationForm):
-    username = forms.CharField(label='Usuario', min_length=3)
+    username = forms.CharField(label='Username', min_length=3)
     first_name = forms.CharField(label='Nombre', min_length=3)
     last_name = forms.CharField(label='Apellido', min_length=3)
     email = forms.EmailField(label='Correo electrónico')
@@ -44,3 +44,23 @@ class UserRegisterForm(UserCreationForm):
         model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
         help_texts = {k: "" for k in fields}
+
+
+class UserEditForm(UserCreationForm):
+    
+    first_name = forms.CharField(label='Nombre', min_length=3)
+    last_name = forms.CharField(label='Apellido', min_length=3)
+    email = forms.EmailField(label='Correo electrónico')
+    password1 = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Repetir contraseña', widget=forms.PasswordInput)
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email', 'password1', 'password2']
+        help_texts = {k: "" for k in fields}
+
+
+class AvatarForm(ModelForm):
+    class Meta:
+        model = Avatar
+        fields = ('image',)

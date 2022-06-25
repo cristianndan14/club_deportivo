@@ -1,5 +1,6 @@
 from operator import mod
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Categoria(models.Model):
@@ -37,3 +38,13 @@ class Entrenamiento(models.Model):
 
     def __str__(self):
         return f'Fecha de entrenamiento: {self.fecha} -- Disciplina: {self.disciplina}'
+
+
+class Avatar(models.Model):
+    # Vinculo con el usuario
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # Subcarpeta avatares de media :)
+    image = models.ImageField(upload_to='avatars', null=True, blank=True)
+
+    def __str__(self):
+        return f'url: {self.image.url}'

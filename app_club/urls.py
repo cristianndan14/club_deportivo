@@ -27,4 +27,8 @@ urlpatterns = [
     path('login', login_request, name='user-login'),
     path('logout', logout_request, name='user-logout'),
     path('register', register, name='user-register'),
+    # ---------------- User update ---------------- #
+    path('register/update', user_update, name='user-update'),
+    # ----------------- Avatar load -------------- #
+    path('avatar/load', avatar_load, name='avatar-load'),
 ]

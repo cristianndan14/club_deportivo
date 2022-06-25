@@ -1,9 +1,14 @@
 {% extends "app_club/index.html" %}
-
 {% load static %}
-
 {% block app_club_content %}
 
+{% if user.is_authenticated %}
+<div class="text-center">
+    <h2>Bienvenido {{ user.username }}</h2>
+    <img height="160px" src="{{url}}" alt="">
+    <h5><a style="color: rgb(3, 36, 184)" href="{% url 'app_club:avatar-load' %}">Cambiar Avatar</a></h5>
+</div>
+{% endif %}
 <h2>Buscador de Categorias</h2>
 <hr></hr>
 

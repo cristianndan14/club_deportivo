@@ -1,3 +1,6 @@
+import os
+import random
+import string
 from django.forms import model_to_dict
 from django.shortcuts import render
 from app_club.forms import *
@@ -8,7 +11,21 @@ from django.contrib.auth.decorators import login_required # --> sirve para prote
 
 # Create your views here.
 def index(request):
-    return render(request, 'app_club/home.html')
+    # avatar load
+    avatar_ctx = get_avatar_url_ctx(request)
+    context_dict = {**avatar_ctx}
+    return render(
+        request=request,
+        context=context_dict,
+        template_name="app_club/home.html"
+        )
+
+
+def get_avatar_url_ctx(request):
+    avatars = Avatar.objects.filter(user=request.user.id)
+    if avatars.exists():
+        return {"url": avatars[0].image.url}
+    return {}
 
 
 def categoria(request):
@@ -142,7 +159,18 @@ def entrenador_form(request):
         entrenador_form = EntrenadorForm(request.POST)
         if entrenador_form.is_valid():
             data = entrenador_form.cleaned_data
+
+
+            # < --------- UNI TEST: pequeña muestra -------- >
+            # KEY_LEN = 20
+            # char_list = [random.choice((string.ascii_letters + string.digits)) for _ in range(KEY_LEN)]
+            # mock_name = ''.join(char_list)
+
+            # print(f'-------------> Prueba con: {mock_name}')
+
+
             entrenador = Entrenador(
+                #nombre=mock_name
                 nombre=data['nombre'], 
                 apellido=data['apellido'], 
                 disciplina=data['disciplina']
@@ -207,7 +235,8 @@ def entrenamiento_form(request):
 
 
 def busqueda(request):
-    context_dict = dict()
+    avatar_ctx = get_avatar_url_ctx(request)
+    context_dict = {**avatar_ctx}
     if request.GET['texto_busqueda']:
         busqueda_param = request.GET['texto_busqueda']
         categoria = Categoria.objects.filter(nombre__contains=busqueda_param)
@@ -231,9 +260,9 @@ def busqueda(request):
         query = Q(nombre__contains=busqueda_param)
         query.add(Q(año__contains=busqueda_param), Q.OR)
         categoria = Categoria.objects.filter(query)
-        context_dict = {
+        context_dict.update = ({
             'categoria' : categoria,
-        }
+        })
 
     return render(
         request=request,
@@ -345,7 +374,8 @@ class CategoriaDeleteView(LoginRequiredMixin, DeleteView):
 from django.shortcuts import redirect
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import login, logout, authenticate
-from app_club.forms import UserRegisterForm # --> importando el form personalizado
+from app_club.forms import UserRegisterForm, UserEditForm # --> importando el form personalizado
+from django.contrib import messages
 
 
 def login_request(request):
@@ -357,13 +387,12 @@ def login_request(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                template_name = "app_club/home.html"
-        else:
-            template_name = "app_club/login.html"
+                return redirect("app_club:Home")
+
         return render(
             request=request,
             context={'form': form},
-            template_name=template_name,
+            template_name="app_club/login.html"
         )
 
     form = AuthenticationForm()
@@ -380,11 +409,9 @@ def register(request):
         form = UserRegisterForm(request.POST) # ---> Personalizando el form, usando de base el de django
         if form.is_valid():
             form.save()
-            return render(
-                request=request,
-                context={"mensaje": "Usuario registrado satisfactoriamente."},
-                template_name="app_club/login.html"
-            )
+            messages.success(request, "Usuario creado exitosamente!")
+            return redirect("app_club:user-login")
+
     # form = UserCreationForm()
     form = UserRegisterForm()
     return render(
@@ -396,4 +423,54 @@ def register(request):
 
 def logout_request(request):
     logout(request)
-    return redirect("app_club:Home")
+    return redirect("app_club:user-login")
+
+
+@login_required
+def user_update(request):
+    user = request.user
+    if request.method == 'POST':
+        form = UserEditForm(request.POST)
+        if form.is_valid():
+            informacion = form.cleaned_data
+            user.first_name = informacion['first_name']
+            user.last_name = informacion['last_name']
+            user.email = informacion['email']
+            user.password1 = informacion['password1']
+            user.password2 = informacion['password2']
+            user.save()
+
+            return redirect('app_club:Home')
+
+    form = UserEditForm(model_to_dict(user))
+    return render(
+        request=request,
+        context={'form': form},
+        template_name="app_club/user_form.html",
+    )
+
+
+@login_required
+def avatar_load(request):
+    if request.method == 'POST':
+        form = AvatarForm(request.POST, request.FILES)
+        if form.is_valid  and len(request.FILES) != 0:
+            image = request.FILES['image']
+            avatars = Avatar.objects.filter(user=request.user.id)
+            if not avatars.exists():
+                avatar = Avatar(user=request.user, image=image)
+            else:
+                avatar = avatars[0]
+                if len(avatar.image) > 0:
+                    os.remove(avatar.image.path)
+                avatar.image = image
+            avatar.save()
+            messages.success(request, "Imagen cargada exitosamente")
+            return redirect('app_club:Home')
+
+    form= AvatarForm()
+    return render(
+        request=request,
+        context={"form": form},
+        template_name="app_club/avatar_form.html",
+    ) 
